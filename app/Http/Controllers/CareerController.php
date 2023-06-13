@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Data\CareerData;
 use App\Services\CareerService;
 use Illuminate\Http\Request;
 
@@ -12,12 +13,14 @@ class CareerController extends CRUDController
      *
      * @param Request $request
      * @param CareerService $careerService
+     * @param CareerData $data
      */
     public function __construct(
         CareerService $careerService,
-        Request $request
+        Request $request,
+        CareerData $data
     ) {
-        parent::__construct($careerService, $request);
+        parent::__construct($careerService, $request, $data);
     }
 
     /**

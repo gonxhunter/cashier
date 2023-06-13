@@ -3,7 +3,7 @@ namespace App\Data;
 
 use Spatie\LaravelData\Data;
 
-class EmployeeData extends Data
+class EmployeeData extends BaseData
 {
     public function __construct(
         public ?string $id,

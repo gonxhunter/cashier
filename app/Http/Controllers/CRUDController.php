@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\{JsonResponse, Request, Response};
 use Illuminate\Validation\ValidationException;
 use Illuminate\Routing\Controller;
+use App\Data\BaseData;
 
 abstract class CRUDController extends Controller
 {
@@ -24,6 +25,8 @@ abstract class CRUDController extends Controller
      */
     protected Request $request;
 
+    protected BaseData $data;
+
     /**
      * @var array
      */
@@ -34,11 +37,13 @@ abstract class CRUDController extends Controller
      *
      * @param BaseService $service
      * @param Request $request
+     * @param BaseData $data
      */
-    public function __construct(BaseService $service, Request $request)
+    public function __construct(BaseService $service, Request $request, BaseData $data)
     {
         $this->service = $service;
         $this->request = $request;
+        $this->data = $data;
     }
 
     /**
@@ -47,7 +52,7 @@ abstract class CRUDController extends Controller
     public function list() : JsonResponse
     {
         return response()->json(
-            $this->service->list(Criteria::createFromRequest($this->request))
+            $this->data->setCollection($this->service->list(Criteria::createFromRequest($this->request)))
         );
     }
 
@@ -59,7 +64,7 @@ abstract class CRUDController extends Controller
      */
     public function show(string $id)
     {
-        return response()->json($this->service->get($id)->getData());
+        return response()->json($this->data->setData($this->service->get($id)));
     }
 
     /**
@@ -69,9 +74,9 @@ abstract class CRUDController extends Controller
      */
     public function store()
     {
-        $data = $this->validate($this->request, $this->getCreateRules(), [], $this->getCustomAttributes());
+        $data = $this->data->setData($this->validate($this->request, $this->getCreateRules(), [], $this->getCustomAttributes()));
         return response()->json(
-            $this->service->create($data)->getData(),
+            $this->data->setData($this->service->create($data->toArray())),
             Response::HTTP_CREATED
         );
     }
@@ -106,7 +111,7 @@ abstract class CRUDController extends Controller
     {
         $data = $this->validate($this->request, $this->getUpdateRules($id), [], $this->getCustomAttributes());
         return response()->json(
-            $this->service->update($id, $data)->getData(),
+            $this->data->getData($this->service->update($id, $data)),
             Response::HTTP_ACCEPTED
         );
     }

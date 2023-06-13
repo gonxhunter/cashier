@@ -13,7 +13,6 @@ use Spatie\LaravelData\WithData;
  */
 class BaseModel extends Model
 {
-    use WithData;
 
     public const DEFAULT_ORDER_SCOPE = 'defaultOrder';
 

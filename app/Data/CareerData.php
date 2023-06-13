@@ -4,7 +4,7 @@ namespace App\Data;
 use Spatie\LaravelData\Data;
 use Spatie\LaravelData\DataCollection;
 
-class CareerData extends Data
+class CareerData extends BaseData
 {
     public function __construct(
         public ?string $id,

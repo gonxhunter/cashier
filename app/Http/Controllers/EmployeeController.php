@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Data\EmployeeData;
 use App\Services\EmployeeService;
 use Illuminate\Http\Request;
 
@@ -12,12 +13,14 @@ class EmployeeController extends CRUDController
      *
      * @param Request $request
      * @param EmployeeService $employeeService
+     * @param EmployeeData $data
      */
     public function __construct(
         EmployeeService $employeeService,
-        Request $request
+        Request $request,
+        EmployeeData $data
     ) {
-        parent::__construct($employeeService, $request);
+        parent::__construct($employeeService, $request, $data);
     }
 
     /**
